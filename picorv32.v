@@ -73,6 +73,7 @@ module picorv32 #(
 	parameter [ 0:0] CATCH_MISALIGN = 1,
 	parameter [ 0:0] CATCH_ILLINSN = 1,
 	parameter [ 0:0] ENABLE_PCPI = 0,
+	parameter [ 0:0] ENABLE_PCPI_ECALL_EBREAK = 0,
 	parameter [ 0:0] ENABLE_MUL = 0,
 	parameter [ 0:0] ENABLE_FAST_MUL = 0,
 	parameter [ 0:0] ENABLE_DIV = 0,
@@ -1082,7 +1083,7 @@ module picorv32 #(
 			instr_rdinstrh <=  (mem_rdata_q[6:0] == 7'b1110011 && mem_rdata_q[31:12] == 'b11001000001000000010) && ENABLE_COUNTERS && ENABLE_COUNTERS64;
 
 			instr_ecall_ebreak <= ((mem_rdata_q[6:0] == 7'b1110011 && !mem_rdata_q[31:21] && !mem_rdata_q[19:7]) ||
-					(COMPRESSED_ISA && mem_rdata_q[15:0] == 16'h9002));
+					(COMPRESSED_ISA && mem_rdata_q[15:0] == 16'h9002)) && !ENABLE_PCPI_ECALL_EBREAK;
 
 			instr_getq    <= mem_rdata_q[6:0] == 7'b0001011 && mem_rdata_q[31:25] == 7'b0000000 && ENABLE_IRQ && ENABLE_IRQ_QREGS;
 			instr_setq    <= mem_rdata_q[6:0] == 7'b0001011 && mem_rdata_q[31:25] == 7'b0000001 && ENABLE_IRQ && ENABLE_IRQ_QREGS;
